@@ -29,13 +29,13 @@ while True: # while no tag -> read for tag
 
 print("found card with uid:", [hex(i) for i in uid], "\n\nprinting contents as ascii codes:\n")
 
-# print contents of all user data pages (5 - 222)
-for page in range(5, 223):
-    # returns single read bytes in a stream. always reads 4 blocks by default, therefore we slice it
-    print(f"page #{page:03}: ", end="") # print with decimal padding for better alignment
+# print contents of all pure user data pages (5 - 225)
+for block in range(5, 226):
+    # returns single read bytes in a stream. always reads 4 pages when given a block address
+    print(f"block #{block:03}: ", end="") # print with decimal padding for better alignment
 
     try:
-        for byte in pn532.mifare_classic_read_block(page)[0:4]:
+        for byte in pn532.mifare_classic_read_block(block)[0:4]:
             print(byte, end=" ")
     except TypeError:
         print("\n\nerror: couldn't finish reading the tag's contents. try holding it closer to the reader.")
