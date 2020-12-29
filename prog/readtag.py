@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# prints the contents of an ntag216 (with 222 pages à 4 bytes, i.e. 888 bytes in total)
 import signal
 import sys
 
@@ -32,6 +33,12 @@ print("found card with uid:", [hex(i) for i in uid], "\n\nprinting contents as a
 for page in range(5, 223):
     # returns single read bytes in a stream. always reads 4 blocks by default, therefore we slice it
     print(f"page #{page:03}: ", end="") # print with decimal padding for better alignment
-    for byte in pn532.mifare_classic_read_block(page)[0:4]:
-        print(byte, end=" ")
+
+    try:
+        for byte in pn532.mifare_classic_read_block(page)[0:4]:
+            print(byte, end=" ")
+    except TypeError:
+        print("\n\nerror: couldn't finish reading the tag's contents. try holding it closer to the reader.")
+        break
+
     print("")
