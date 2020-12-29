@@ -1,7 +1,7 @@
 teamstand -- ViM
 =================================================
 
-kiosk-style video player der über nfc tags, befestigt an tokens, gesteuert wird.
+kiosk-style video player der über nfc tags (ntag216), befestigt an tokens, gesteuert wird.
 
 ------
 

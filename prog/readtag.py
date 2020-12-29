@@ -26,14 +26,12 @@ while True: # while no tag -> read for tag
     if uid is not None:
         break
 
-print("Found card with UID:", [hex(i) for i in uid], "\n\nprinting contents as ascii codes:\n")
+print("found card with uid:", [hex(i) for i in uid], "\n\nprinting contents as ascii codes:\n")
 
-# print contents of all user data pages (4 - 222)
-for page in range(5, 223): # 222 = num of user data pages
-    counter = 1 # to separate the blocks with commas
-    for bit in pn532.mifare_classic_read_block(page): # returns single read bits in a stream, always reads 4 blocks in total
-        print(bit, end="")
-        if counter % 4 == 0 and counter != 16 and counter != 1:
-            print(",", end="")
-        counter+=1
+# print contents of all user data pages (5 - 222)
+for page in range(5, 223):
+    # returns single read bytes in a stream. always reads 4 blocks by default, therefore we slice it
+    print(f"page #{page:03}: ", end="") # print with decimal padding for better alignment
+    for byte in pn532.mifare_classic_read_block(page)[0:4]:
+        print(byte, end=" ")
     print("")
