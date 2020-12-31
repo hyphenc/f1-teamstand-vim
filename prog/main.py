@@ -13,12 +13,11 @@ tags = { # examples for now
     "SPOI": "spoiler"
 }
 
-# where the 4 byte IDs are stored
+# at what block address the 4 byte IDs are stored
 block = 8
 
 # for keeping track of our threads
-last_tid = None
-new_tid = None
+new_tid = last_tid = None
 tlist = list()
 
 # dgpio connection pins for software spi
@@ -44,15 +43,15 @@ def init_player():
     def q_binding():
         player.quit()
 
-    @player.on_key_press('ESC')
+    @player.on_key_press("ESC")
     def esc_binding():
         player.quit()
 
 def start_play_thread(filename):
     player.loadfile(filename, mode="replace")
-    return
+    return # yes, it's an ugly hack to return control to the "main" thread and not stop playback
     try: # pylint: disable=unreachable
-        player.wait_for_playback() # yes, it's an ugly hack to return control to the "main" thread and not stop playback
+        player.wait_for_playback()
     except mpv.ShutdownError:
         pass # allow shutdown (using keyboard input) while playback
 
@@ -65,9 +64,9 @@ def play(filename):
     new_tid.start()
     tlist.append(new_tid)
 
-    if (last_tid == None):
+    if (last_tid == None): # we don't have an old thread yet
         pass
-    elif (last_tid.is_alive()): # we don't have an old thread yet
+    elif (last_tid.is_alive()):
         last_tid.join() # join old thread
 
     last_tid = new_tid
