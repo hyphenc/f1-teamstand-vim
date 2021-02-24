@@ -3,6 +3,7 @@
 from sys import argv
 from sys import exit
 
+# pylint: disable=import-error
 import Adafruit_PN532 as PN532
 
 # check for proper usage

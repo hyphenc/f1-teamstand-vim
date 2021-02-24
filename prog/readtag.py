@@ -3,6 +3,7 @@
 import signal
 import sys
 
+# pylint: disable=import-error
 import Adafruit_PN532 as PN532
 
 # dgpio connection pins for software spi

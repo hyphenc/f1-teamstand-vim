@@ -1,0 +1,16 @@
+# See /boot/overlays/README for all available options
+# https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3
+
+gpu_mem=128
+initramfs initramfs-linux.img followkernel
+
+hdmi_drive=2
+dtparam=audio=on
+dtparam=spi=on
+
+# fix overscan
+# ADJUST TO YOUR SCREEN!
+overscan_left=-64
+overscan_right=-64
+overscan_top=-64
+overscan_bottom=-64

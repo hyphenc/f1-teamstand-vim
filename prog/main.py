@@ -2,6 +2,7 @@
 import sys
 from threading import Thread
 
+# pylint: disable=import-error
 import mpv
 import Adafruit_PN532 as PN532
 
@@ -14,7 +15,7 @@ tags = { # examples for now
 }
 
 # at what block address the 4 byte IDs are stored
-block = 8
+block = 6
 
 # for keeping track of our threads
 new_tid = last_tid = None
