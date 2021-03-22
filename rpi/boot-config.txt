@@ -1,7 +1,7 @@
 # See /boot/overlays/README for all available options
 # https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3
 
-gpu_mem=128
+gpu_mem=256
 initramfs initramfs-linux.img followkernel
 
 hdmi_drive=2

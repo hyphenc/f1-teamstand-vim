@@ -2,8 +2,6 @@
 
 > kiosk-style video player der über nfc tags (ntag216), befestigt an tokens, gesteuert wird.
 
-**WORK IN PROGRESS**
-
 ## info
 
 in diesem projekt werden quasi die [neue](https://github.com/adafruit/Adafruit_CircuitPython_PN532/blob/master/examples/pn532_readwrite_ntag2xx.py)
@@ -13,6 +11,15 @@ da die funktionen sich aber allgemein sehr ähneln, kann man den code der beiden
 ### trivia
 
 das vorherige team hat das mit einer custom gui in gtk gemacht. das war mir zu anstrengend und da ich wusste, dass [mpv](https://github.com/mpv-player/mpv) auch bilder "abspielen" kann und relativ anpassbar ist, machen wir das jetzt damit, also über mpvs IPC socket über python-mpv.
+
+transitions sind schöner (mit mpv 0.29.1), wenn bilder auch als videos behandelt werden, d.h. 300ms standbild als mp4 oder so.
+
+## was benötigt wird
+* raspberry pi 3
+* archlinux arm
+* aur helper (yay)
+* pn532 nfc rfid module v3
+* ntag216 nfc tags
 
 ## dateien
 
@@ -24,11 +31,6 @@ separates helper script: liest die daten der user memory section eines ntags aus
 
 ### `writetag.py`
 separates helper script: schreibt 4 bytes an daten auf eine blockadresse oder setzt die dort vorhandenen daten auf `0x0`/`NULL`.
-
-## komponenten
-* raspberry pi 3
-* pn532 nfc rfid module v3
-* ntag216 nfc tags
 
 ## etc
 
