@@ -17,13 +17,13 @@ das vorherige team hat das mit einer custom gui in gtk gemacht. das war mir zu a
 ## dateien
 
 ### `main.py`
-handelt das nfc scanning & die IPC mit mpv.
+macht das nfc scanning & die IPC mit mpv.
 
 ### `readtag.py`
-separates helper script: liest die daten der user memory section eines s ntags aus.
+separates helper script: liest die daten der user memory section eines ntags aus.
 
 ### `writetag.py`
-separates helper script: schreibt 4 bytes an daten auf eine blockadresse oder setzt die dort vorhandenen daten auf 0x0/NULL.
+separates helper script: schreibt 4 bytes an daten auf eine blockadresse oder setzt die dort vorhandenen daten auf `0x0`/`NULL`.
 
 ## komponenten
 * raspberry pi 3
