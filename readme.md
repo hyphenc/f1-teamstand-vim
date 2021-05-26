@@ -1,40 +1,57 @@
 # teamstand - ViM
 
-> kiosk-style video player der über nfc tags (ntag216), befestigt an tokens, gesteuert wird.
+> kiosk-style video player der über nfc tags, befestigt an tokens, gesteuert wird.
 
-## info
+## geplante funktionsweise
+wip
 
-in diesem projekt werden quasi die [neue](https://github.com/adafruit/Adafruit_CircuitPython_PN532/blob/master/examples/pn532_readwrite_ntag2xx.py)
-und die [alte](https://github.com/adafruit/Adafruit_Python_PN532/blob/master/Adafruit_PN532/PN532.py) library für den adafruit pn532 vereint, da die erstere zwar neuer ist, aber anscheined nur hardware spi verbindungen unterstützt, wobei das vorhandene setup software spi benötigt.
-da die funktionen sich aber allgemein sehr ähneln, kann man den code der beiden ganz gut zusammenbasteln.
+## umsetzung
+wip
 
-### trivia
+### erstkonzept
+wip
 
-das vorherige team hat das mit einer custom gui in gtk gemacht. das war mir zu anstrengend und da ich wusste, dass [mpv](https://github.com/mpv-player/mpv) auch bilder "abspielen" kann und relativ anpassbar ist, machen wir das jetzt damit, also über mpvs IPC socket über python-mpv.
+### zweitkonzept
+wip
 
-transitions sind schöner (mit mpv 0.29.1), wenn bilder auch als videos behandelt werden, d.h. 300ms standbild als mp4 oder so.
 
-## was benötigt wird
+## dateien
+
+### `main.py`
+* `prog/main.py` macht das nfc scanning und kontrolliert den videplayer (mpv). hier finden sich noch bugs und teilweise fehlen noch funktionsweisen, siehe dazu die [issues](https://github.com/hyphenc/f1-teamstand-vim/issues).
+
+### helper
+* `prog/readtag.py` liest die daten der user memory section eines ntags aus.
+* `prog/writetag.py` schreibt 4 bytes an daten auf eine blockadresse oder setzt die dort vorhandenen daten auf `0x0`/`NULL`.
+
+### beispiele
+* `examples/seamless-playback.py` zeigt, wie flüssig der übergang zwischen video- bzw. bilddateien ist, wenn die hardware gut genug ist.
+* zuerst wird eine bilddatei gezeigt und dann zwei videos. die farben wurden invertiert, damit man sehen kann, dass eine neue datei abgespielt wird.
+
+
+## how to
+
+### komponenten
 * raspberry pi 3
 * archlinux arm
 * aur helper (yay)
 * pn532 nfc rfid module v3
 * ntag216 nfc tags
 
-## dateien
+### guide
+* `rpi/boot-config.txt` anpassen.
+* `rpi/setup-guidance.sh` nicht einfach blind ausführen. es ist eher eine rekonstruktion der genutzten/benötigten commands.
+* der rest sollte offensichtlich sein, wenn man mit gnu/linux vertraut ist.
 
-### `main.py`
-macht das nfc scanning & die IPC mit mpv.
-
-### `readtag.py`
-separates helper script: liest die daten der user memory section eines ntags aus.
-
-### `writetag.py`
-separates helper script: schreibt 4 bytes an daten auf eine blockadresse oder setzt die dort vorhandenen daten auf `0x0`/`NULL`.
 
 ## etc
 
-* anmerkung: ich bin/war kein mitglied des teams.
-* [supported codecs](https://ffmpeg.org/general.html#Supported-File-Formats_002c-Codecs-or-Features)
-* das [ntag216 spec sheet](https://www.nxp.com/docs/en/data-sheet/NTAG213_215_216.pdf) ist sehr hilfreich.
+### erkenntnisse
+* der raspberry pi 3b+ ist _nicht wirklich_ für 1080p >30fps videoplayback geeignet
+* der raspberry pi 3b+ überhitzt gerne, aufgrund von schlechtem hardwaredesign
+* ggf. stürzt er deswegen auch mal ab
+* mit alten libraries aus kompatibilitätsgründen programmversionen von vor 2 jahren zu kompilieren ist... nervig
 
+### sonstiges
+* anmerkung: ich bin/war kein mitglied des teams.
+* das [ntag216 spec sheet](https://www.nxp.com/docs/en/data-sheet/NTAG213_215_216.pdf) ist sehr hilfreich.
