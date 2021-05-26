@@ -8,11 +8,14 @@ import Adafruit_PN532 as PN532
 
 # ID stored on tag <-> media file
 tags = { # examples for now
-    "HOME": "home",
-    "REIF": "reifen",
-    "CHAS": "chassis",
+    "HOME": "test.mp4",
+    "REIF": "v2.mov",
+    "CHAS": "v2-inv.mov",
     "SPOI": "spoiler"
 }
+
+# media directory, with trailing slash
+path = "/home/alarm/teamstand-vim/examples/res/"
 
 # at what block address the 4 byte IDs are stored
 block = 6
@@ -20,6 +23,8 @@ block = 6
 # for keeping track of our threads
 new_tid = last_tid = None
 tlist = list()
+
+lastplayed = ""
 
 # dgpio connection pins for software spi
 CS   = 18
@@ -36,9 +41,8 @@ def init_player():
     # pylint: disable=unused-variable
     global player
     player = mpv.MPV(ytdl=False, input_default_bindings=False,
-    fullscreen=True, keep_open=True, osd_level=0, video_osd=False,
-    osc=False, input_vo_keyboard=True, cursor_autohide="always",
-    demuxer_thread="yes", merge_files=True, image_display_duration="inf")
+    fullscreen=True, keep_open=False, osd_level=0, video_osd=False,
+    osc=False, input_vo_keyboard=True, cursor_autohide="always")
 
     @player.on_key_press("q")
     def q_binding():
@@ -49,19 +53,26 @@ def init_player():
         player.quit()
 
 def start_play_thread(filename):
-    player.loadfile(filename, mode="replace")
-    return # yes, it's an ugly hack to return control to the "main" thread and not stop playback
+    print("new file loaded and playing")
+    player.loadfile(path+filename, mode="replace")
+    return # yes, it's an ugly hack to return control to the main thread and not stop playback
     try: # pylint: disable=unreachable
         player.wait_for_playback()
     except mpv.ShutdownError:
-        pass # allow shutdown (using keyboard input) while playback
+        pass # handle shutdown event
 
-def play(filename):
+def play(fileid):
 # for playback we start a new thread and join (aka terminate) the previously used thread
     global last_tid # tid = thread id
     global new_tid
+    global lastplayed
 
-    new_tid = Thread(target=start_play_thread(filename))
+    if fileid == lastplayed:
+        return
+    else:
+        lastplayed = fileid
+
+    new_tid = Thread(target=start_play_thread(tags[fileid]))
     new_tid.start()
     tlist.append(new_tid)
 
@@ -84,14 +95,14 @@ def readtag():
         pass # couldn't finish reading block N. ignore
 
     try:
-        play(tags[recv])
+        play(recv)
     except KeyError: # dict key doesn't exist
         pass # ignore possible other ntag2xx tags that have data in block address N
 
 
 if __name__ == "__main__":
     init_player()
-    play(tags["HOME"])
+    play("HOME")
 
     while True: # main loop
         uid = pn532.read_passive_target(timeout_sec=0.5)
